@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.UserMapper" >
+   <sql id="Base_Column_List" >
+	    user_id, login_id, login_phone, password, member_id, phone, name, nickname, avatar_url,device_token, 
+	    device_type, user_type, user_level, sex, birthday, qq, mail, idcard_no, delete_flag, 
+	    update_time, insert_time
+  </sql>
+  <!-- 登陆 -->
+  <select id="appLogin" parameterType="java.util.Map" resultType="com.gtercn.carhome.web.api.entity.User">
+  		select * from tc_user 
+  		where login_phone=#{loginPhone} 
+  		and password=#{password}
+  		and delete_flag = 0
+  </select>
+  
+  <!-- 登陆查询用户账号是否存在 -->
+   <select id="getUserByAccount" parameterType="java.util.Map" resultType="com.gtercn.carhome.web.api.entity.User">
+  		select * from tc_user where login_phone=#{loginPhone} and delete_flag = 0
+  </select>
+   <select id="getCountByAccount" parameterType="java.util.Map" resultType="java.lang.Integer">
+  		select count(1) from tc_user where login_phone=#{loginPhone} and delete_flag = 0
+  </select>
+  
+   <!-- 主键查询 select <include refid="Base_Column_List"/> from tc_user -->
+   <select id="getUserById" resultType="com.gtercn.carhome.web.api.entity.User" parameterType="java.lang.String" >
+    select * from tc_user
+    where user_id = #{userId,jdbcType=VARCHAR} and delete_flag = 0
+  </select>
+  
+  <!-- 更新设备token -->
+  <update id="updateDeviceToken" parameterType="java.util.Map" >
+		update tc_user set device_token=#{deviceToken},device_type=#{deviceType}
+		where user_id=#{userId}
+  </update>
+  <!-- 重置密码 -->
+  <update id="resetPassword" parameterType="java.util.Map" >
+		update tc_user set password=#{newPwd},update_time=now() where user_id=#{userId}
+  </update>
+    <!--修改手机号 -->
+  <update id="resetLoginPhone" parameterType="java.util.Map" >
+		update tc_user set login_phone=#{loginPhone},update_time=now() where user_id=#{userId}
+  </update>
+  
+  <!-- 用户资料更改等 -->
+   <update id="updateUserPersonlInfo" parameterType="java.util.Map" >
+		update tc_user   
+			<set>
+				<if test="nickname!=null and nickname!=''">
+					nickname=#{nickname,jdbcType=VARCHAR},
+				</if>
+				<if test="realName!=null and realName!=''">
+					real_name=#{realName,jdbcType=VARCHAR},
+				</if>
+				<if test="sex!=null and sex!=''">
+					sex=#{sex,jdbcType=VARCHAR},
+				</if>
+				<if test="avatarUrl!=null and avatarUrl!=''">
+					avatar_url=#{avatarUrl,jdbcType=VARCHAR}
+				</if>
+			</set>
+		where user_id=#{userId}
+  </update>
+  
+  <!-- 插入 -->
+  <insert id="insert" parameterType="com.gtercn.carhome.web.api.entity.User" >
+    insert into tc_user (user_id,login_phone, 
+      password, avatar_url,nickname, device_token, 
+      device_type, delete_flag, update_time, insert_time)
+    values (#{userId,jdbcType=VARCHAR},  #{loginPhone,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR},#{avatarUrl,jdbcType=VARCHAR}, 
+      #{nickname,jdbcType=VARCHAR}, #{deviceToken,jdbcType=VARCHAR}, 
+      #{deviceType,jdbcType=INTEGER}, #{deleteFlag,jdbcType=INTEGER},now(), now())
+  </insert>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tc_user
+    where user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
+  
+  <!-- 个人信息 -->
+  <select id="getPersonalInfo" resultType="com.gtercn.carhome.web.api.entity.User" parameterType="java.lang.String" >
+ 	select * from tc_user where user_id=#{userId,jdbcType=VARCHAR}
+  </select>
+
+</mapper>

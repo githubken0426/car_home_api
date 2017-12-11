@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.SelfDrivingTrowellingMapper" >
+  <resultMap id="BaseResultMap" type="com.gtercn.carhome.web.api.entity.SelfDrivingTrowelling" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="pic_urls" property="picUrls" jdbcType="VARCHAR" />
+    <result column="available_flag" property="availableFlag" jdbcType="INTEGER" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="activity_time" property="activityTime" jdbcType="TIMESTAMP" />
+    <result column="delete_flag" property="deleteFlag" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="insert_time" property="insertTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, title, content, pic_urls, available_flag, delete_flag, update_time, insert_time, activity_time, city_code
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_self_driving_trowelling
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_self_driving_trowelling
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gtercn.carhome.web.api.entity.SelfDrivingTrowelling" >
+    insert into tb_self_driving_trowelling (id, user_id, title, content, 
+      pic_urls, available_flag, city_code, activity_time, delete_flag, 
+      update_time, insert_time)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+      #{picUrls,jdbcType=VARCHAR}, #{availableFlag,jdbcType=INTEGER}, #{cityCode,jdbcType=INTEGER}, #{activityTime,jdbcType=TIMESTAMP},
+      #{deleteFlag,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{insertTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gtercn.carhome.web.api.entity.SelfDrivingTrowelling" >
+    insert into tb_self_driving_trowelling
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="picUrls != null" >
+        pic_urls,
+      </if>
+      <if test="availableFlag != null" >
+        available_flag,
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="insertTime != null" >
+        insert_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrls != null" >
+        #{picUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="availableFlag != null" >
+        #{availableFlag,jdbcType=INTEGER},
+      </if>
+      <if test="deleteFlag != null" >
+        #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="insertTime != null" >
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gtercn.carhome.web.api.entity.SelfDrivingTrowelling" >
+    update tb_self_driving_trowelling
+    <set >
+      <if test="title != null" >
+      	user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="picUrls != null" >
+        pic_urls = #{picUrls,jdbcType=VARCHAR},
+      </if>
+      <if test="availableFlag != null" >
+        available_flag = #{availableFlag,jdbcType=INTEGER},
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="insertTime != null" >
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gtercn.carhome.web.api.entity.SelfDrivingTrowelling" >
+    update tb_self_driving_trowelling
+    set user_id = #{userId,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      pic_urls = #{picUrls,jdbcType=VARCHAR},
+      available_flag = #{availableFlag,jdbcType=INTEGER},
+      delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  	<!-- 获取自驾游信息列表(未登录状态下) -->
+	<select id="getInfoListNoLogin" resultType="com.gtercn.carhome.web.api.entity.SelfDrivingTrowelling" parameterType="java.util.Map">
+	    select DISTINCT(a.id), a.title, a.content, a.user_id, b.nickname, b.avatar_url, a.pic_urls, a.available_flag, a.update_time, 
+	    	 '0' as sign_flag, '0' as collection_flag, a.activity_time
+		from tb_self_driving_trowelling as a INNER JOIN tc_user as b on a.user_id = b.user_id
+		where a.delete_flag != 1
+		and a.city_code = #{cityCode}
+		order by a.activity_time desc
+	</select>
+	
+	<!-- 获取自驾游信息列表(登录状态下) -->
+	<select id="getInfoList" resultType="com.gtercn.carhome.web.api.entity.SelfDrivingTrowelling" parameterType="java.util.Map">
+		select a.id, a.user_id, a.title, a.content, d.nickname, d.avatar_url, a.pic_urls, a.available_flag, a.update_time, b.sign_flag, 
+			IFNULL(c.favor_type,0) as collection_flag, a.activity_time
+		from tb_self_driving_trowelling as a left outer join tb_self_driving_extend as b
+		on a.id = b.self_driving_id left outer join tb_favor as c on b.user_id = c.user_id and b.self_driving_id = c.favor_id and c.delete_flag != 1
+		left outer join tc_user as d on a.user_id = d.user_id 
+		where b.user_id = #{userId}
+		and a.delete_flag != 1
+		and a.city_code = #{cityCode}
+		UNION ALL
+		select a.id, a.user_id, a.title, a.content, b.nickname, b.avatar_url, a.pic_urls, a.available_flag, a.update_time, 0, 
+			IFNULL(c.favor_type,0) as collection_flag, a.activity_time
+		from tb_self_driving_trowelling as a INNER JOIN tc_user as b ON a.user_id = b.user_id
+		LEFT OUTER JOIN tb_favor as c on c.user_id = #{userId}
+		and a.id = c.favor_id and c.delete_flag != 1
+		where a.id NOT IN (SELECT b.self_driving_id from tb_self_driving_extend as b WHERE b.user_id = #{userId})
+		and a.delete_flag != 1
+		and a.city_code = #{cityCode}
+		order by activity_time desc
+	</select>
+	
+	<!-- 获取自驾游信息(登录状态下) -->
+	<select id="getInfoOne" resultType="com.gtercn.carhome.web.api.entity.SelfDrivingTrowelling" parameterType="java.util.Map">
+		select a.id, a.user_id, a.title, a.content, d.nickname, d.avatar_url, a.pic_urls, a.available_flag, a.update_time, b.sign_flag, 
+		IFNULL(c.favor_type,0) as collection_flag, a.city_code, a.activity_time
+		from tb_self_driving_trowelling as a left outer join tb_self_driving_extend as b
+		on a.id = b.self_driving_id left outer join tb_favor as c on b.user_id = c.user_id and b.self_driving_id = c.favor_id and c.delete_flag != 1
+		left outer join tc_user as d on a.user_id = d.user_id 
+		where b.user_id = #{userId}
+		and a.delete_flag != 1
+		and a.id = #{id}
+		UNION ALL
+		select a.id, a.user_id, a.title, a.content, b.nickname, b.avatar_url, a.pic_urls, a.available_flag, a.update_time, 0, 
+		IFNULL(c.favor_type,0) as collection_flag, a.city_code, a.activity_time
+		from tb_self_driving_trowelling as a INNER JOIN tc_user as b ON a.user_id = b.user_id
+		LEFT OUTER JOIN tb_favor as c on c.user_id = #{userId}
+		and a.id = c.favor_id and c.delete_flag != 1
+		where a.id NOT IN (SELECT b.self_driving_id from tb_self_driving_extend as b WHERE b.user_id = #{userId})
+		and a.delete_flag != 1
+		and a.id = #{id}
+	</select>
+	
+	<!-- 获取自驾游评论信息列表 -->
+	<select id="getCommentList" resultType="com.gtercn.carhome.web.api.entity.Reply" parameterType="java.util.Map">
+	    SELECT a.id, a.user_id, b.nickname, a.to_user_id, c.nickname as to_nickname, a.content, a.insert_time, b.avatar_url
+		FROM tb_reply as a left join tc_user as b on a.user_id = b.user_id LEFT JOIN tc_user as c on a.to_user_id = c.user_id
+		WHERE a.type_id = "2"
+		and a.delete_flag = "0"
+		and a.reference_id = #{selfDrivingId}
+		and (ISNULL(a.to_user_id) = 1 OR a.to_user_id = "")
+	</select>
+	
+	<!-- 获取自驾游评论回复信息列表 -->
+	<select id="getCommentReply" resultType="com.gtercn.carhome.web.api.entity.Reply" parameterType="java.util.Map">
+	    SELECT a.id, a.user_id, b.nickname, a.to_user_id, c.nickname as to_nickname, a.content, a.insert_time, b.avatar_url
+		FROM tb_reply as a left join tc_user as b on a.user_id = b.user_id LEFT JOIN tc_user as c on a.to_user_id = c.user_id
+		WHERE a.type_id = "2"
+		and a.delete_flag = "0"
+		and item_id = #{itemId} 
+		and reference_id = #{selfDrivingId}
+		ORDER BY insert_time
+	</select>
+	
+	<!-- 获取我的活动（自驾游） -->
+	<select id="getActivityList" resultType="com.gtercn.carhome.web.api.entity.SelfDrivingTrowelling" parameterType="java.util.Map">
+	    SELECT a.id, a.user_id, a.title, a.content, a.pic_urls, a.available_flag, a.delete_flag, a.update_time, a.insert_time, 
+	    IFNULL(c.favor_type,0) as collection_flag, a.city_code, a.activity_time
+	    from tb_self_driving_trowelling a left outer join tb_favor as c on a.user_id = c.user_id and a.id = c.favor_id and c.delete_flag != 1
+		WHERE a.user_id = #{userId}
+		and a.city_code = #{cityCode}
+		and a.delete_flag != 1
+		UNION
+		SELECT a.id, a.user_id, a.title, a.content, a.pic_urls, a.available_flag, a.delete_flag, a.update_time, a.insert_time,
+		IFNULL(c.favor_type,0) as collection_flag, a.city_code, a.activity_time
+		from tb_self_driving_trowelling a INNER JOIN tb_self_driving_extend b on a.id = b.self_driving_id 
+		left outer join tb_favor c on b.user_id = c.user_id and a.id = c.favor_id and c.delete_flag != 1
+		WHERE b.user_id = #{userId}
+		and b.sign_flag != 0
+		and a.city_code = #{cityCode}
+		and a.delete_flag != 1
+		and b.delete_flag != 1
+		order by activity_time desc
+	</select>
+	
+	<!-- 获取查看名单 -->
+	<select id="getSearchName" resultType="com.gtercn.carhome.web.api.entity.SelfDrivingTrowelling" parameterType="java.lang.String">
+	    SELECT b.user_id, b.nickname, b.avatar_url FROM tb_self_driving_extend a, tc_user b
+		WHERE a.self_driving_id = #{selfDrivingId}
+		and a.user_id = b.user_id
+		and a.delete_flag != 1
+
+	</select>
+	
+	<!-- 获取查看名单人数 -->
+	<select id="getCount" resultType="java.lang.Integer" parameterType="java.lang.String">
+	    SELECT count(1)
+	    FROM tb_self_driving_extend a, tc_user b
+		WHERE a.self_driving_id = #{selfDrivingId}
+		and a.user_id = b.user_id
+		and a.delete_flag != 1
+
+	</select>
+</mapper>

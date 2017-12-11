@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.VersionMapper">
+	
+	<sql id="Base_Column_List">
+		id, version_code, version_name, content, url, min_code, min_version,
+		min_content,state, system_bj
+	</sql>
+	<select id="selectByPrimaryKey" resultType="com.gtercn.carhome.web.api.entity.Version" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from tc_version
+		where id = #{id,jdbcType=VARCHAR}
+	</select>
+	
+	<!-- 通过系统标识获取版本信息-->
+	<select id="getBySystemBj" resultType="com.gtercn.carhome.web.api.entity.Version" parameterType="java.lang.String">
+		select <include refid="Base_Column_List" />
+		from tc_version
+		where system_bj=#{systemBj}
+	</select>
+	
+</mapper>

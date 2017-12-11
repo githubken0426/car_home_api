@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.HomeCarouselMapper">
+	<sql id="Base_Column_List">
+		id, title,
+		content, res_url_list,
+		html_url, picture_url, city_code, delete_flag,
+		insert_time, update_time
+  </sql>
+  
+	<!-- 根据城市编号查询 -->
+	<select id="selectByCityCode" resultType="com.gtercn.carhome.web.api.entity.HomeCarousel"
+		parameterType="java.lang.String">
+		select id, city_code, picture_url, html_url
+		from tb_home_carousel 
+		where city_code = #{cityCode,jdbcType=VARCHAR}
+		and delete_flag != 1
+		order by update_time desc limit 0,5
+	</select>
+</mapper>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.AdvertisementMapper" >
+  <resultMap id="BaseResultMap" type="com.gtercn.carhome.web.api.entity.Advertisement" >
+    <id column="advertisement_id" property="advertisementId" jdbcType="VARCHAR" />
+    <result column="page_url" property="pageUrl" jdbcType="VARCHAR" />
+    <result column="picture_id" property="pictureId" jdbcType="VARCHAR" />
+    <result column="advertisement_type" property="advertisementType" jdbcType="INTEGER" />
+    <result column="sort_no" property="sortNo" jdbcType="INTEGER" />
+    <result column="flag" property="flag" jdbcType="INTEGER" />
+    <result column="delete_flag" property="deleteFlag" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="insert_time" property="insertTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    advertisement_id, page_url, picture_id, advertisement_type, 
+    sort_no, flag, delete_flag, update_time, insert_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_advertisement
+    where advertisement_id = #{advertisementId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_advertisement
+    where advertisement_id = #{advertisementId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gtercn.carhome.web.api.entity.Advertisement" >
+    insert into tb_advertisement (advertisement_id, page_url, picture_id, 
+      advertisement_type, sort_no, flag, 
+      delete_flag, update_time, insert_time
+      )
+    values (#{advertisementId,jdbcType=VARCHAR}, #{pageUrl,jdbcType=VARCHAR}, #{pictureId,jdbcType=VARCHAR}, 
+      #{advertisementType,jdbcType=INTEGER}, #{sortNo,jdbcType=INTEGER}, #{flag,jdbcType=INTEGER}, 
+      #{deleteFlag,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{insertTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gtercn.carhome.web.api.entity.Advertisement" >
+    insert into tb_advertisement
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="advertisementId != null" >
+        advertisement_id,
+      </if>
+      <if test="pageUrl != null" >
+        page_url,
+      </if>
+      <if test="pictureId != null" >
+        picture_id,
+      </if>
+      <if test="advertisementType != null" >
+        advertisement_type,
+      </if>
+      <if test="sortNo != null" >
+        sort_no,
+      </if>
+      <if test="flag != null" >
+        flag,
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="insertTime != null" >
+        insert_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="advertisementId != null" >
+        #{advertisementId,jdbcType=VARCHAR},
+      </if>
+      <if test="pageUrl != null" >
+        #{pageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureId != null" >
+        #{pictureId,jdbcType=VARCHAR},
+      </if>
+      <if test="advertisementType != null" >
+        #{advertisementType,jdbcType=INTEGER},
+      </if>
+      <if test="sortNo != null" >
+        #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null" >
+        #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="deleteFlag != null" >
+        #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="insertTime != null" >
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gtercn.carhome.web.api.entity.Advertisement" >
+    update tb_advertisement
+    <set >
+      <if test="pageUrl != null" >
+        page_url = #{pageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureId != null" >
+        picture_id = #{pictureId,jdbcType=VARCHAR},
+      </if>
+      <if test="advertisementType != null" >
+        advertisement_type = #{advertisementType,jdbcType=INTEGER},
+      </if>
+      <if test="sortNo != null" >
+        sort_no = #{sortNo,jdbcType=INTEGER},
+      </if>
+      <if test="flag != null" >
+        flag = #{flag,jdbcType=INTEGER},
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="insertTime != null" >
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where advertisement_id = #{advertisementId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gtercn.carhome.web.api.entity.Advertisement" >
+    update tb_advertisement
+    set 
+      page_url = #{pageUrl,jdbcType=VARCHAR},
+      picture_id = #{pictureId,jdbcType=VARCHAR},
+      advertisement_type = #{advertisementType,jdbcType=INTEGER},
+      sort_no = #{sortNo,jdbcType=INTEGER},
+      flag = #{flag,jdbcType=INTEGER},
+      delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP}
+    where advertisement_id = #{advertisementId,jdbcType=VARCHAR}
+  </update>
+  
+  
+  <!-- 查询首页中间部分的分类模块 -->
+   <select id="getActivitySort" resultType="com.gtercn.carhome.web.api.entity.Advertisement" >
+    select page_url,picture_id,advertisement_type,sort_no,flag from tb_advertisement where advertisement_type = 2 and delete_flag=0 
+  </select>
+  
+    <!-- 查询首页顶部的广告部分 -->
+   <select id="getTopAdvertisement" resultType="com.gtercn.carhome.web.api.entity.Advertisement" >
+    select page_url,picture_id,advertisement_type,sort_no,flag from tb_advertisement where advertisement_type = 1 and delete_flag=0
+  </select>
+  
+   <!-- 查询首页底部的推荐优惠广告部分 -->
+   <select id="getBottomAdvertisement" resultType="com.gtercn.carhome.web.api.entity.Advertisement" >
+    select page_url,picture_id,advertisement_type,sort_no,flag from tb_advertisement where advertisement_type = 3 and delete_flag=0
+  </select>
+
+</mapper>
