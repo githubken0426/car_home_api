@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.SelfDrivingExtendMapper" >
+  <resultMap id="BaseResultMap" type="com.gtercn.carhome.web.api.entity.SelfDrivingExtend" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="self_driving_id" property="selfDrivingId" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="sign_flag" property="signFlag" jdbcType="INTEGER" />
+    <result column="delete_flag" property="deleteFlag" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="insert_time" property="insertTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, self_driving_id, user_id, sign_flag, delete_flag, update_time, 
+    insert_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_self_driving_extend
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_self_driving_extend
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gtercn.carhome.web.api.entity.SelfDrivingExtend" >
+    insert into tb_self_driving_extend (id, self_driving_id, user_id, 
+      sign_flag, delete_flag, 
+      update_time, insert_time)
+    values (#{id,jdbcType=VARCHAR}, #{selfDrivingId,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, 
+      #{signFlag,jdbcType=INTEGER}, #{deleteFlag,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{insertTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gtercn.carhome.web.api.entity.SelfDrivingExtend" >
+    insert into tb_self_driving_extend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="selfDrivingId != null" >
+        self_driving_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="signFlag != null" >
+        sign_flag,
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="insertTime != null" >
+        insert_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="selfDrivingId != null" >
+        #{selfDrivingId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="signFlag != null" >
+        #{signFlag,jdbcType=INTEGER},
+      </if>
+      <if test="deleteFlag != null" >
+        #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="insertTime != null" >
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gtercn.carhome.web.api.entity.SelfDrivingExtend" >
+    update tb_self_driving_extend
+    <set >
+      <if test="selfDrivingId != null" >
+        self_driving_id = #{selfDrivingId,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="signFlag != null" >
+        sign_flag = #{signFlag,jdbcType=INTEGER},
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="insertTime != null" >
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gtercn.carhome.web.api.entity.SelfDrivingExtend" >
+    update tb_self_driving_extend
+    set self_driving_id = #{selfDrivingId,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      sign_flag = #{signFlag,jdbcType=INTEGER},
+      delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="selectInfo" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_self_driving_extend
+    where delete_flag != 1
+    and self_driving_id = #{selfDrivingId,jdbcType=VARCHAR}
+    and user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+</mapper>

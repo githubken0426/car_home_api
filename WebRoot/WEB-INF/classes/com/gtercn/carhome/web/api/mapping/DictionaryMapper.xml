@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.DictionaryMapper">
+
+	<sql id="Base_Column_List">
+		dictionary_id, dictionary_type, dictionary_name, dictionary_value, sort_no,
+		delete_flag, update_time, insert_time
+  </sql>
+  <!-- 主键查询 -->
+	<select id="selectByPrimaryKey" resultType="com.gtercn.carhome.web.api.entity.Dictionary" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from tc_dictionary
+		where dictionary_id = #{dictionaryId,jdbcType=VARCHAR}
+	</select>
+	
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from tc_dictionary
+		where dictionary_id = #{dictionaryId,jdbcType=VARCHAR}
+  </delete>
+	<insert id="insert" parameterType="com.gtercn.carhome.web.api.entity.Dictionary">
+		insert into tc_dictionary (dictionary_id, dictionary_type,
+		dictionary_name, dictionary_value, sort_no,
+		delete_flag, update_time, insert_time
+		)
+		values (#{dictionaryId,jdbcType=VARCHAR},
+		#{dictionaryType,jdbcType=VARCHAR},
+		#{dictionaryName,jdbcType=VARCHAR},
+		#{dictionaryValue,jdbcType=VARCHAR}, #{sortNo,jdbcType=VARCHAR},
+		#{deleteFlag,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP},
+		#{insertTime,jdbcType=TIMESTAMP}
+		)
+  </insert>
+	<insert id="insertSelective" parameterType="com.gtercn.carhome.web.api.entity.Dictionary">
+		insert into tc_dictionary
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dictionaryId != null">
+				dictionary_id,
+      </if>
+			<if test="dictionaryType != null">
+				dictionary_type,
+      </if>
+			<if test="dictionaryName != null">
+				dictionary_name,
+      </if>
+			<if test="dictionaryValue != null">
+				dictionary_value,
+      </if>
+			<if test="sortNo != null">
+				sort_no,
+      </if>
+			<if test="deleteFlag != null">
+				delete_flag,
+      </if>
+			<if test="updateTime != null">
+				update_time,
+      </if>
+			<if test="insertTime != null">
+				insert_time,
+      </if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dictionaryId != null">
+				#{dictionaryId,jdbcType=VARCHAR},
+      </if>
+			<if test="dictionaryType != null">
+				#{dictionaryType,jdbcType=VARCHAR},
+      </if>
+			<if test="dictionaryName != null">
+				#{dictionaryName,jdbcType=VARCHAR},
+      </if>
+			<if test="dictionaryValue != null">
+				#{dictionaryValue,jdbcType=VARCHAR},
+      </if>
+			<if test="sortNo != null">
+				#{sortNo,jdbcType=VARCHAR},
+      </if>
+			<if test="deleteFlag != null">
+				#{deleteFlag,jdbcType=INTEGER},
+      </if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+      </if>
+			<if test="insertTime != null">
+				#{insertTime,jdbcType=TIMESTAMP},
+      </if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gtercn.carhome.web.api.entity.Dictionary">
+		update tc_dictionary
+		<set>
+			<if test="dictionaryType != null">
+				dictionary_type = #{dictionaryType,jdbcType=VARCHAR},
+      </if>
+			<if test="dictionaryName != null">
+				dictionary_name = #{dictionaryName,jdbcType=VARCHAR},
+      </if>
+			<if test="dictionaryValue != null">
+				dictionary_value = #{dictionaryValue,jdbcType=VARCHAR},
+      </if>
+			<if test="sortNo != null">
+				sort_no = #{sortNo,jdbcType=VARCHAR},
+      </if>
+			<if test="deleteFlag != null">
+				delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      </if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+			<if test="insertTime != null">
+				insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+		</set>
+		where dictionary_id = #{dictionaryId,jdbcType=VARCHAR}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gtercn.carhome.web.api.entity.Dictionary">
+		update tc_dictionary
+		set dictionary_type = #{dictionaryType,jdbcType=VARCHAR},
+		dictionary_name = #{dictionaryName,jdbcType=VARCHAR},
+		dictionary_value = #{dictionaryValue,jdbcType=VARCHAR},
+		sort_no = #{sortNo,jdbcType=VARCHAR},
+		delete_flag = #{deleteFlag,jdbcType=INTEGER},
+		update_time = #{updateTime,jdbcType=TIMESTAMP},
+		insert_time = #{insertTime,jdbcType=TIMESTAMP}
+		where dictionary_id = #{dictionaryId,jdbcType=VARCHAR}
+  </update>
+
+	<select id="selectByTypeFlag" resultType="com.gtercn.carhome.web.api.entity.Dictionary"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from tc_dictionary
+		where dictionary_type = #{dictionaryType,jdbcType=VARCHAR}
+		and delete_flag != 1
+	</select>
+
+	<select id="selectByTypeFlagAndValue" resultType="com.gtercn.carhome.web.api.entity.Dictionary"
+		parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List" />
+		from tc_dictionary
+		where dictionary_type = #{dictionaryType,jdbcType=VARCHAR}
+		and dictionary_value = #{dictionaryValue,jdbcType=VARCHAR}
+		and delete_flag != 1
+	</select>
+</mapper>

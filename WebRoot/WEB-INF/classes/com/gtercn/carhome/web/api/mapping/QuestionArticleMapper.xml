@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.QuestionArticleMapper" >
+  <resultMap id="BaseResultMap" type="com.gtercn.carhome.web.api.entity.QuestionArticle" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="introduction" property="introduction" jdbcType="INTEGER" />
+    <result column="support_number" property="supportNumber" jdbcType="INTEGER" />
+    <result column="favor_number" property="favorNumber" jdbcType="INTEGER" />
+    <result column="glance_number" property="glanceNumber" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="res_url_list" property="resUrlList" jdbcType="VARCHAR" />
+    <result column="html_url" property="htmlUrl" jdbcType="VARCHAR" />
+    <result column="delete_flag" property="deleteFlag" jdbcType="INTEGER" />
+    <result column="insert_time" property="insertTime"  jdbcType="DATE"/>
+    <result column="update_time" property="updateTime"  jdbcType="DATE"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, type, title, introduction, support_number, favor_number, glance_number, 
+    content, res_url_list,html_url,delete_flag,city_code, 
+    date_format(insert_time,'%Y-%m-%d %H:%i:%s') as insert_time,
+    date_format(update_time,'%Y-%m-%d %H:%i:%s') as update_time
+  </sql>
+  
+  <!-- 查询问题 -->
+  <select id="queryAllQuestion" resultMap="BaseResultMap" parameterType="java.util.Map" >
+    select <include refid="Base_Column_List" />
+    from tb_question_and_article
+    where type = #{type,jdbcType=VARCHAR}
+    and delete_flag=0
+  </select>
+  
+   <!-- 查询问题 <![CDATA[]]>-->
+  <select id="queryQuestionCondition" resultType="com.gtercn.carhome.web.api.entity.QuestionArticle" 
+  		parameterType="java.util.Map" >
+	    select id, 
+	    (select nickname from tc_user where user_id=q.user_id) as nickname,  
+		(select avatar_url from tc_user where user_id=q.user_id) as user_portrait,
+		introduction,type,title,support_number,glance_number, 
+	    content, res_url_list,html_url,delete_flag,city_code,
+	    date_format(insert_time,'%Y-%m-%d %H:%i:%s') as insert_time,
+	    date_format(update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+	    (select  
+	    	case  
+		    when TIMESTAMPDIFF(minute,insert_time,now()) between 0 and 60
+		    then CONCAT(CONVERT(TIMESTAMPDIFF(minute,insert_time,now()),char),'分钟前') 
+		    when TIMESTAMPDIFF(hour,insert_time,now()) between 0 and 8
+		    then CONCAT(CONVERT(TIMESTAMPDIFF(hour,insert_time,now()),char),'小时前') 
+		    when TIMESTAMPDIFF(hour,insert_time,now()) &gt; 8
+		    then date_format(insert_time,'%Y-%m-%d %H:%m')
+	    	end
+	    	from tb_question_and_article a where a.id=q.id
+	    ) as publish_time,
+	    (select count(0) from tb_reply r where r.reference_id=q.id) as reply_num
+	    from tb_question_and_article q
+	    <where>
+	    	type = 1 and delete_flag=0
+	    </where>
+	    order by insert_time desc
+	    limit 0,100
+  </select>
+  
+   <!-- 查询 文章 <![CDATA[]]>-->
+  <select id="queryArticleCondition" resultType="com.gtercn.carhome.web.api.entity.QuestionArticle" 
+  		parameterType="java.util.Map" >
+	    select id, 
+	    (select motto from tb_expert_top where user_id=q.user_id) as motto, 
+	    (select expert_tel_number from tb_expert_top where user_id=q.user_id) as telephone_number,
+		(select expert_wechat_number from tb_expert_top where user_id=q.user_id) as expert_wechat_number,
+	    (select expert_name from tb_expert_top where user_id=q.user_id) as expert_name,
+	    (select nickname from tc_user where user_id=q.user_id) as nickname,  
+		(select expert_portrait_url from tb_expert_top where user_id=q.user_id) as expert_portrait,
+		(select avatar_url from tc_user where user_id=q.user_id) as user_portrait,
+		introduction,type,title,support_number,glance_number, 
+	    content, res_url_list,html_url,delete_flag,city_code,
+	    date_format(insert_time,'%Y-%m-%d %H:%i:%s') as insert_time,
+	    date_format(update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+	    (select  
+	    	case  
+		    when TIMESTAMPDIFF(minute,insert_time,now()) between 0 and 60
+		    then CONCAT(CONVERT(TIMESTAMPDIFF(minute,insert_time,now()),char),'分钟前') 
+		    when TIMESTAMPDIFF(hour,insert_time,now()) between 0 and 8
+		    then CONCAT(CONVERT(TIMESTAMPDIFF(hour,insert_time,now()),char),'小时前') 
+		    when TIMESTAMPDIFF(hour,insert_time,now()) &gt; 8
+		    then date_format(insert_time,'%Y-%m-%d %H:%m')
+	    	end
+	    	from tb_question_and_article a where a.id=q.id
+	    ) as publish_time,
+	    (select count(0) from tb_reply r where r.reference_id=q.id) as reply_num,
+	    (select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id=q.id and favor_type=3 and delete_flag=0) as is_favored,
+		(select count(favor_id) from tb_favor where 
+			favor_id=q.id and favor_type=3 and delete_flag=0) as favor_number
+	    from tb_question_and_article q
+	    <where>
+	    	type = 3  
+	    	and delete_flag=0 
+	    	and city_code=#{cityCode,jdbcType=VARCHAR}
+	    </where>
+	    order by insert_time desc
+	    limit 0,100
+  </select>
+  
+  <!-- 查询我的问题或文章 -->
+   <select id="queryMyArticleQuestion" resultMap="BaseResultMap" parameterType="java.util.Map" >
+   	 select <include refid="Base_Column_List" /> from tb_question_and_article
+     where type = #{type,jdbcType=VARCHAR} and user_id=#{userId,jdbcType=VARCHAR}
+     and delete_flag=0
+   </select>
+   
+   <!-- 文章详情 -->
+    <select id="queryArticleDetail" resultType="com.gtercn.carhome.web.api.entity.QuestionArticle" parameterType="java.util.Map" >
+   	 select id, 
+	    (select motto from tb_expert_top where user_id=q.user_id) as motto, 
+	    (select expert_tel_number from tb_expert_top where user_id=q.user_id) as telephone_number,
+		(select expert_wechat_number from tb_expert_top where user_id=q.user_id) as expert_wechat_number,
+	    (select expert_name from tb_expert_top where user_id=q.user_id) as expert_name,
+	    (select nickname from tc_user where user_id=q.user_id) as nickname,  
+		(select expert_portrait_url from tb_expert_top where user_id=q.user_id) as expert_portrait,
+		(select avatar_url from tc_user where user_id=q.user_id) as user_portrait,
+		introduction,type,title,support_number,glance_number, 
+	    content, res_url_list,html_url,delete_flag,city_code,
+	    date_format(insert_time,'%Y-%m-%d %H:%i:%s') as insert_time,
+	    date_format(update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+	    (select  
+	    	case  
+		    when TIMESTAMPDIFF(minute,insert_time,now()) between 0 and 60
+		    then CONCAT(CONVERT(TIMESTAMPDIFF(minute,insert_time,now()),char),'分钟前') 
+		    when TIMESTAMPDIFF(hour,insert_time,now()) between 0 and 8
+		    then CONCAT(CONVERT(TIMESTAMPDIFF(hour,insert_time,now()),char),'小时前') 
+		    when TIMESTAMPDIFF(hour,insert_time,now()) &gt; 8
+		    then date_format(insert_time,'%Y-%m-%d %H:%m')
+	    	end
+	    	from tb_question_and_article a where a.id=q.id
+	    ) as publish_time,
+	    (select count(0) from tb_reply r where r.reference_id=q.id) as reply_num,
+	    (select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id=q.id and favor_type=3 and delete_flag=0) as is_favored,
+		(select count(favor_id) from tb_favor where 
+			favor_id=q.id and favor_type=3 and delete_flag=0) as favor_number
+	    from tb_question_and_article q
+	    <where>
+	    	type = 3 and delete_flag=0 and id=#{id,jdbcType=VARCHAR}
+	    </where>
+   </select>
+   
+   <!-- 问题详情-->
+  <select id="queryQuestionDetail" resultType="com.gtercn.carhome.web.api.entity.QuestionArticle" 
+  		parameterType="java.util.Map" >
+	    select id, 
+	    (select nickname from tc_user where user_id=q.user_id) as nickname,  
+		(select avatar_url from tc_user where user_id=q.user_id) as user_portrait,
+		introduction,type,title,support_number,glance_number, 
+	    content, res_url_list,html_url,delete_flag,city_code,
+	    date_format(insert_time,'%Y-%m-%d %H:%i:%s') as insert_time,
+	    date_format(update_time,'%Y-%m-%d %H:%i:%s') as update_time,
+	    (select  
+	    	case  
+		    when TIMESTAMPDIFF(minute,insert_time,now()) between 0 and 60
+		    then CONCAT(CONVERT(TIMESTAMPDIFF(minute,insert_time,now()),char),'分钟前') 
+		    when TIMESTAMPDIFF(hour,insert_time,now()) between 0 and 8
+		    then CONCAT(CONVERT(TIMESTAMPDIFF(hour,insert_time,now()),char),'小时前') 
+		    when TIMESTAMPDIFF(hour,insert_time,now()) &gt; 8
+		    then date_format(insert_time,'%Y-%m-%d %H:%m')
+	    	end
+	    	from tb_question_and_article a where a.id=q.id
+	    ) as publish_time,
+	    (select count(0) from tb_reply r where r.reference_id=q.id) as reply_num
+	    from tb_question_and_article q
+	    <where>
+	    	type = 1 and delete_flag=0 and id=#{id,jdbcType=VARCHAR}
+	    </where>
+  </select>
+  
+  <!-- 新增问题 -->
+  <insert id="insertQuestion" parameterType="com.gtercn.carhome.web.api.entity.write.QuestionArticle" >
+    insert into tb_question_and_article (id, user_id, type, 
+      title, support_number, favor_number, glance_number, content, 
+      res_url_list, delete_flag, insert_time, update_time)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR},  #{supportNumber,jdbcType=INTEGER}, 
+      #{favorNumber,jdbcType=INTEGER}, #{glanceNumber,jdbcType=INTEGER}, #{content,jdbcType=INTEGER}, 
+      #{resUrlList,jdbcType=VARCHAR}, 0, now(),now() )
+  </insert>
+  <!-- 新增文章 -->
+  <insert id="insertArticl" parameterType="com.gtercn.carhome.web.api.entity.write.QuestionArticle" >
+    insert into tb_question_and_article (id, user_id, type, 
+      title, publish_time, support_number, 
+      favor_number, glance_number, content, 
+      res_url_list, delete_flag, insert_time, 
+      update_time)
+    values (#{id,jdbcType=VARCHAR}, #{user_id,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{publishTime,jdbcType=VARCHAR}, #{supportNumber,jdbcType=INTEGER}, 
+      #{favorNumber,jdbcType=INTEGER}, #{glanceNumber,jdbcType=INTEGER}, #{content,jdbcType=INTEGER}, 
+      #{resUrlList,jdbcType=VARCHAR}, #{deleteFlag,jdbcType=INTEGER}, #{insertTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <!-- 返回userid -->
+  <select id="selectToUserById" resultType="java.lang.String"  parameterType="java.lang.String" >
+  	select user_id from tb_question_and_article where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select  <include refid="Base_Column_List" />
+    from tb_question_and_article
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <!-- 增加浏览数量 -->
+  <update id="updateGlaceNumber" parameterType="java.lang.String">
+		update tb_question_and_article
+		set glance_number=glance_number+1
+		where id = #{id,jdbcType=VARCHAR}
+  </update>	
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_question_and_article
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.gtercn.carhome.web.api.entity.write.QuestionArticle" >
+    insert into tb_question_and_article
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="user_id != null" >
+        user_id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="publishTime != null" >
+        publish_time,
+      </if>
+      <if test="supportNumber != null" >
+        support_number,
+      </if>
+      <if test="favorNumber != null" >
+        favor_number,
+      </if>
+      <if test="glanceNumber != null" >
+        glance_number,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="resUrlList != null" >
+        res_url_list,
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag,
+      </if>
+      <if test="insertTime != null" >
+        insert_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="user_id != null" >
+        #{user_id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="publishTime != null" >
+        #{publishTime,jdbcType=VARCHAR},
+      </if>
+      <if test="supportNumber != null" >
+        #{supportNumber,jdbcType=INTEGER},
+      </if>
+      <if test="favorNumber != null" >
+        #{favorNumber,jdbcType=INTEGER},
+      </if>
+      <if test="glanceNumber != null" >
+        #{glanceNumber,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=INTEGER},
+      </if>
+      <if test="resUrlList != null" >
+        #{resUrlList,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null" >
+        #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="insertTime != null" >
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKey" parameterType="com.gtercn.carhome.web.api.entity.write.QuestionArticle" >
+    update tb_question_and_article
+    set user_id = #{userId,jdbcType=VARCHAR},
+      type = #{type,jdbcType=INTEGER},
+      title = #{title,jdbcType=VARCHAR},
+      publish_time = #{publishTime,jdbcType=VARCHAR},
+      support_number = #{supportNumber,jdbcType=INTEGER},
+      favor_number = #{favorNumber,jdbcType=INTEGER},
+      glance_number = #{glanceNumber,jdbcType=INTEGER},
+      content = #{content,jdbcType=INTEGER},
+      res_url_list = #{resUrlList,jdbcType=VARCHAR},
+      delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

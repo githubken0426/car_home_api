@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.PromotionMapper" >
+  <resultMap id="BaseResultMap" type="com.gtercn.carhome.web.api.entity.Promotion" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="shop_id" property="shopId" jdbcType="VARCHAR" />
+    <result column="city_code" property="cityCode" jdbcType="VARCHAR" />
+    <result column="start_date" property="startDate" jdbcType="VARCHAR" />
+    <result column="end_date" property="endDate" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="picture_list" property="pictureList" jdbcType="VARCHAR" />
+    <result column="html_url" property="htmlUrl" jdbcType="VARCHAR" />
+    <result column="is_favored" property="isFavored" jdbcType="VARCHAR" />
+    <result column="delete_flag" property="deleteFlag" jdbcType="INTEGER" />
+    <result column="insert_time" property="insertTime" jdbcType="VARCHAR" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, shop_id, start_date,end_date,city_code, title, introduction,content,background_image,
+    picture_list,html_url,city_code,delete_flag, insert_time, update_time
+  </sql>
+  <!-- 查询所有促销 -->
+   <select id="selectAllData" resultType="com.gtercn.carhome.web.api.entity.Promotion" parameterType="java.util.Map">
+		select id, shop_id,introduction,background_image,
+		(select shop_name from tc_shop where id=p.shop_id) as shop_name,
+		(select concat(IFNULL(city,''),IFNULL(detail_address,'')) from tc_shop where id=p.shop_id) as shop_address,
+		(select tel_number_list from tc_shop where id=p.shop_id) as shop_phone,
+		(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id=p.id and favor_type=5 and delete_flag=0) as is_favored,
+		date_format(start_date,'%Y年%m月%d日') as start_date,
+		date_format(end_date,'%Y年%m月%d日') as end_date,
+		title,content, picture_list,html_url,delete_flag,city_code,
+		date_format(insert_time,'%Y-%m-%d %H:%i') as insert_time, 
+		date_format(update_time,'%Y-%m-%d %H:%i') as update_time 
+		from tb_promotion p 
+		<where>
+			delete_flag=0 and city_code=#{cityCode,jdbcType=VARCHAR}
+			<if test="title!=null and title!=''">
+				and p.title like '%${title}%'
+			</if>
+		</where>
+		order by insert_time desc
+		limit 0,100
+  </select>
+  
+  <!-- 详情 -->
+  <select id="selectPromotionDetail" resultType="com.gtercn.carhome.web.api.entity.Promotion" parameterType="java.util.Map" >
+   		select id, shop_id,introduction,background_image,
+			(select shop_name from tc_shop where id=p.shop_id) as shop_name,
+			(select concat(IFNULL(city,''),IFNULL(detail_address,'')) 
+								from tc_shop where id=p.shop_id) as shop_address,
+			(select tel_number_list from tc_shop where id=p.shop_id) as shop_phone,
+			(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+				and favor_id=p.id and favor_type=5 and delete_flag=0) as is_favored,
+			date_format(start_date,'%Y年%m月%d日') as start_date,
+			date_format(end_date,'%Y年%m月%d日') as end_date,
+			title,content, picture_list,html_url,delete_flag,city_code,
+			date_format(insert_time,'%Y-%m-%d %H:%i') as insert_time, 
+			date_format(update_time,'%Y-%m-%d %H:%i') as update_time 
+			from tb_promotion p 
+		<where>
+			delete_flag=0 and id = #{id,jdbcType=VARCHAR}
+		</where>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_promotion
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.gtercn.carhome.web.api.entity.Promotion" >
+    insert into tb_promotion (id, shop_id, end_date, 
+      title, content, picture_list, 
+      delete_flag, insert_time, update_time
+      )
+    values (#{id,jdbcType=VARCHAR}, #{shopId,jdbcType=VARCHAR}, #{endDate,jdbcType=DATE}, 
+      #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{pictureList,jdbcType=VARCHAR}, 
+      #{deleteFlag,jdbcType=INTEGER}, #{insertTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gtercn.carhome.web.api.entity.Promotion" >
+    insert into tb_promotion
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="shopId != null" >
+        shop_id,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="pictureList != null" >
+        picture_list,
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag,
+      </if>
+      <if test="insertTime != null" >
+        insert_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="shopId != null" >
+        #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureList != null" >
+        #{pictureList,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null" >
+        #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="insertTime != null" >
+        #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gtercn.carhome.web.api.entity.Promotion" >
+    update tb_promotion
+    <set >
+      <if test="shopId != null" >
+        shop_id = #{shopId,jdbcType=VARCHAR},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="pictureList != null" >
+        picture_list = #{pictureList,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteFlag != null" >
+        delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      </if>
+      <if test="insertTime != null" >
+        insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gtercn.carhome.web.api.entity.Promotion" >
+    update tb_promotion
+    set shop_id = #{shopId,jdbcType=VARCHAR},
+      end_date = #{endDate,jdbcType=DATE},
+      title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      picture_list = #{pictureList,jdbcType=VARCHAR},
+      delete_flag = #{deleteFlag,jdbcType=INTEGER},
+      insert_time = #{insertTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

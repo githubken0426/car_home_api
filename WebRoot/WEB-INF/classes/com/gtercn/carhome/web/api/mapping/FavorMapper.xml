@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.FavorMapper" >
+  <resultMap id="BaseResultMap" type="com.gtercn.carhome.web.api.entity.Favor" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="favor_id" property="favorId" jdbcType="VARCHAR" />
+    <result column="favor_type" property="favorType" jdbcType="INTEGER" />
+    <result column="delete_flag" property="deleteFlag" jdbcType="INTEGER" />
+    <result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+    <result column="insert_time" property="insertTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, favor_id, favor_type, delete_flag, update_time, insert_time
+  </sql>
+  <!-- 查询用户收藏 -->
+    <select id="queryUserFavor" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select  id,user_id, favor_id,favor_type,delete_flag,
+    	date_format(insert_time,'%Y-%m-%d %H:%i') as insert_time, 
+		date_format(update_time,'%Y-%m-%d %H:%i') as update_time,
+		case favor_type  
+		when 1 then (select title from tb_self_driving_trowelling where id=favor_id )
+		when 3 then (select title from tb_question_and_article where id=favor_id )
+		when 4 then (select title from tb_information where id=favor_id )
+		when 5 then (select title from tb_promotion where id=favor_id )
+		when 6 then (select shop_name from tc_shop where id =
+			(select shop_id from tb_rescue where id=favor_id ))
+		when 7 then (select shop_name from tc_shop where id=favor_id )
+		end as title
+	from tb_favor 
+	where user_id = #{userId,jdbcType=VARCHAR}
+	and delete_flag!=1
+  </select>
+  <!-- 查询是否收藏 -->
+    <select id="queryIsUserFavored" resultMap="BaseResultMap" parameterType="com.gtercn.carhome.web.api.entity.Favor" >
+    select <include refid="Base_Column_List" /> from tb_favor 
+    where user_id = #{userId,jdbcType=VARCHAR} 
+    and favor_id = #{favorId,jdbcType=VARCHAR}
+    and favor_type = #{favorType,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="addFavor" parameterType="com.gtercn.carhome.web.api.entity.Favor" >
+    insert into tb_favor (id, user_id, favor_id, 
+      favor_type, delete_flag, update_time, insert_time)
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{favorId,jdbcType=VARCHAR}, 
+      #{favorType,jdbcType=INTEGER}, 0,NOW(),NOW())
+  </insert>
+  
+  <delete id="changeFavorById" parameterType="java.util.Map" >
+    <!-- delete from tb_favor where id = #{id,jdbcType=VARCHAR} -->
+    update tb_favor set delete_flag=#{deleteFlag,jdbcType=VARCHAR} 
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <delete id="cancelFavor" parameterType="java.util.Map" >
+    update tb_favor set delete_flag=#{deleteFlag,jdbcType=VARCHAR} 
+    where user_id = #{userId,jdbcType=VARCHAR} 
+    and favor_id = #{favorId,jdbcType=VARCHAR}
+    and favor_type = #{favorType,jdbcType=VARCHAR}
+  </delete>
+</mapper>

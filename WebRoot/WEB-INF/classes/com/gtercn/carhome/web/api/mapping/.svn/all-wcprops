@@ -1,0 +1,131 @@
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/repos/!svn/ver/19535/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping
+END
+QuestionArticleMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/repos/!svn/ver/19998/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/QuestionArticleMapper.xml
+END
+FavorMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/repos/!svn/ver/19653/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/FavorMapper.xml
+END
+UserMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/repos/!svn/ver/19541/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/UserMapper.xml
+END
+HomeSearchMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/repos/!svn/ver/19516/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/HomeSearchMapper.xml
+END
+SelfDrivingTrowellingMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 141
+/svn/repos/!svn/ver/19979/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/SelfDrivingTrowellingMapper.xml
+END
+SelfDrivingExtendMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 137
+/svn/repos/!svn/ver/19391/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/SelfDrivingExtendMapper.xml
+END
+FeedbackMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 128
+/svn/repos/!svn/ver/19396/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/FeedbackMapper.xml
+END
+VersionMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/repos/!svn/ver/18154/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/VersionMapper.xml
+END
+InformationMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 131
+/svn/repos/!svn/ver/20255/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/InformationMapper.xml
+END
+HomeCarouselMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/repos/!svn/ver/19570/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/HomeCarouselMapper.xml
+END
+RescueMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/repos/!svn/ver/19646/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/RescueMapper.xml
+END
+PromotionMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/repos/!svn/ver/19914/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/PromotionMapper.xml
+END
+ExpertTopMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 129
+/svn/repos/!svn/ver/19626/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/ExpertTopMapper.xml
+END
+ReplyMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 125
+/svn/repos/!svn/ver/19029/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/ReplyMapper.xml
+END
+VerifyCodeMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/repos/!svn/ver/18163/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/VerifyCodeMapper.xml
+END
+DictionaryMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/repos/!svn/ver/18163/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/DictionaryMapper.xml
+END
+DictionaryTypeMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 134
+/svn/repos/!svn/ver/18163/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/DictionaryTypeMapper.xml
+END
+CityMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/repos/!svn/ver/19708/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/CityMapper.xml
+END
+ExpertTypeMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/repos/!svn/ver/18387/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/ExpertTypeMapper.xml
+END
+UserLoginlogMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 132
+/svn/repos/!svn/ver/18145/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/UserLoginlogMapper.xml
+END
+AdvertisementMapper.xml
+K 25
+svn:wc:ra_dav:version-url
+V 133
+/svn/repos/!svn/ver/18725/RDC2016/Carhome/src/development/api/car_home/src/com/gtercn/carhome/web/api/mapping/AdvertisementMapper.xml
+END

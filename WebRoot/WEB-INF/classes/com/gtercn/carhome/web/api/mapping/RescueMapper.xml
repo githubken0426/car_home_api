@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.RescueMapper" >
+  
+  	<!-- 获取救援信息列表 -->
+	<select id="getInfoList" resultType="com.gtercn.carhome.web.api.entity.Rescue" parameterType="java.util.Map">
+	    select b.id, b.shop_id, a.shop_pic_url, a.shop_name, a.shop_score, a.shop_description, a.longitude, a.latitude,
+			a.province, a.city, a.district, a.detail_address, a.tel_number_list, a.display_pic_url_list,
+			b.type_value, b.experience, b.head_portrait_url, b.product_description,
+			(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id= a.id and favor_type=6 and delete_flag != 1) as is_favored
+		from tc_shop as a, tb_rescue as b
+		where a.id = b.shop_id
+		and a.delete_flag != 1 
+	</select>
+	
+	<!-- 获取救援检索信息列表 -->
+	<select id="getInfoSearchList" resultType="com.gtercn.carhome.web.api.entity.Rescue" parameterType="java.util.Map">
+	    select b.id, b.shop_id, a.shop_pic_url, a.shop_name, a.shop_score, a.shop_description, a.longitude, a.latitude,
+			a.province, a.city, a.district, a.detail_address, a.tel_number_list, a.display_pic_url_list,
+			b.type_value, b.experience, b.head_portrait_url, b.product_description,
+			(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id= a.id and favor_type=6 and delete_flag != 1) as is_favored
+		from tc_shop as a, tb_rescue as b
+		where a.id = b.shop_id
+		and a.delete_flag != 1
+		<if test="keyword != null and keyword != ''" >
+		    and a.shop_name like '%${keyword}%'
+		</if>
+	</select>
+	
+	<!-- 获取单个救援公司信息 -->
+	<select id="getOneRescueInfo" resultType="com.gtercn.carhome.web.api.entity.Rescue" parameterType="java.util.Map">
+	    select b.id, b.shop_id, a.shop_pic_url, a.shop_name, a.shop_score, a.shop_description, a.longitude, a.latitude,
+			a.province, a.city, a.district, a.detail_address, a.tel_number_list, a.display_pic_url_list,
+			b.type_value, b.experience, b.head_portrait_url, b.product_description,
+			(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id= a.id and favor_type=6 and delete_flag != 1) as is_favored
+		from tc_shop as a, tb_rescue as b
+		where a.id = b.shop_id
+		and b.shop_id = #{shopId}
+		and a.delete_flag != 1 
+	</select>
+	
+	<!-- 获取洗车修车等信息列表 -->
+	<select id="getServiceList" resultType="com.gtercn.carhome.web.api.entity.Rescue" parameterType="java.util.Map">
+	    select b.id, b.shop_id, a.rescue_service, a.repair_service, a.clean_service, a.maintain_service, a.tyre_service, a.shop_pic_url, 
+	    	a.shop_name, a.shop_score, a.shop_description, a.longitude, a.latitude,
+			a.province, a.city, a.district, a.detail_address, a.tel_number_list, a.display_pic_url_list, b.service_brands_url,
+			(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id= a.id and favor_type=6 and delete_flag != 1) as is_favored
+		from tc_shop as a, tc_service as b
+		where a.id = b.shop_id
+			and b.service_type = #{serviceType}
+			and a.delete_flag != 1 
+	</select>
+	
+	<!-- 获取洗车修车等信息列表 -->
+	<select id="getServiceSearchList" resultType="com.gtercn.carhome.web.api.entity.Rescue" parameterType="java.util.Map">
+	    select b.id, b.shop_id, a.rescue_service, a.repair_service, a.clean_service, a.maintain_service, a.tyre_service, a.shop_pic_url, 
+	    	a.shop_name, a.shop_score, a.shop_description, a.longitude, a.latitude,
+			a.province, a.city, a.district, a.detail_address, a.tel_number_list, a.display_pic_url_list, b.service_brands_url,
+			(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id= a.id and favor_type=6 and delete_flag != 1) as is_favored
+		from tc_shop as a, tc_service as b
+		where a.id = b.shop_id
+			and b.service_type = #{serviceType}
+			and a.delete_flag != 1 
+			<if test="keyword != null and keyword != ''" >
+			    and a.shop_name like '%${keyword}%'
+			</if>
+	</select>
+	
+	<!-- 获取洗车修车等信息列表 -->
+	<select id="getServiceDifType" resultType="com.gtercn.carhome.web.api.entity.Rescue" parameterType="java.util.Map">
+	    select b.id, b.shop_id, a.rescue_service, a.repair_service, a.clean_service, a.maintain_service, a.tyre_service, a.shop_pic_url, 
+	    	a.shop_name, a.shop_score, a.shop_description, a.longitude, a.latitude,
+			a.province, a.city, a.district, a.detail_address, a.tel_number_list, a.display_pic_url_list, b.service_brands_url,
+			(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id=#{shopId} and favor_type=6 and delete_flag != 1) as is_favored
+		from tc_shop as a, tc_service as b
+		where a.id = b.shop_id
+			and b.shop_id = #{shopId}
+			and b.service_type = #{serviceType}
+			and a.delete_flag != 1 
+	</select>
+	
+	<!-- 获取四类服务等信息列表 -->
+	<select id="getServiceTypeList" resultType="com.gtercn.carhome.web.api.entity.ServiceType" parameterType="java.util.Map">
+	    select a.id, a.repair_service, a.clean_service, a.maintain_service, a.tyre_service, a.shop_pic_url, 
+	    	a.shop_name, a.shop_score as score, a.detail_address, a.tel_number_list, a.longitude, a.latitude
+		from tc_shop as a
+		where a.delete_flag != 1
+		and a.city_code = #{cityCode}
+		order by a.insert_time desc limit #{beginNum},#{overNum}
+	</select>
+	
+	<!-- 获取单个四类服务公司信息 -->
+	<select id="getOneServiceInfo" resultType="com.gtercn.carhome.web.api.entity.ServiceDetail" parameterType="java.util.Map">
+	    select a.shop_description, a.province, a.city, a.display_pic_url_list, a.product_description,
+			(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id= a.id and favor_type=7 and delete_flag != 1) as is_favored,
+			a.repair_service, a.clean_service, a.maintain_service, a.tyre_service, a.shop_pic_url, 
+	    	a.shop_name, a.shop_score as score, a.detail_address, a.tel_number_list, a.longitude, a.latitude
+		from tc_shop as a
+		where a.id = #{shopId}
+		and a.delete_flag != 1 
+	</select>
+	
+	<!-- 获取四类服务等信息列表 -->
+	<select id="getRescueTypeList" resultType="com.gtercn.carhome.web.api.entity.RescueType" parameterType="java.util.Map">
+	    select b.id, b.head_portrait_url, b.type_value, a.city, a.detail_address,
+	    	a.shop_name, a.shop_score, a.longitude, a.latitude, a.tel_number_list
+		from tc_shop as a, tb_rescue as b
+		where a.id = b.shop_id
+		and b.delete_flag != 1
+		and a.delete_flag != 1
+		and a.city_code = #{cityCode}
+		order by b.insert_time desc limit #{beginNum},#{overNum}
+	</select>
+	
+	<!-- 获取单个救援公司信息 -->
+	<select id="getOneRescueTypeInfo" resultType="com.gtercn.carhome.web.api.entity.RescueDetail" parameterType="java.util.Map">
+	    select b.id, a.province, a.city, a.detail_address, 
+	    	a.tel_number_list, a.display_pic_url_list, b.product_description,
+			(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id= b.id and favor_type=6 and delete_flag != 1) as is_favored,
+			b.head_portrait_url, b.type_value, a.shop_name, a.shop_description, a.shop_score, a.longitude, a.latitude
+		from tc_shop as a, tb_rescue as b
+		where a.id = b.shop_id
+		and b.id = #{rescueId}
+		and b.delete_flag != 1 
+		and a.delete_flag != 1 
+	</select>
+</mapper>

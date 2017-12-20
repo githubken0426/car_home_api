@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gtercn.carhome.web.api.dao.HomeSearchMapper">
+
+	<!-- 废弃-->
+	<select id="unsupported" resultType="com.gtercn.carhome.web.api.entity.HomeSearch" parameterType="java.util.Map">
+		<!--1.自驾游 -->
+		select t.id as id,t.title as title,content,t.pic_urls as picture_list,
+		null as nickname,0 as support_number,0 as favor_number,0 as glance_number,
+		null as publish_time,null as address,null as shop_score,null as experience,
+		null as distance,null as phone,null as shop_id,e.sign_flag as sign_flag,1 as search_type,
+		date_format(t.insert_time,'%Y-%m-%d %H:%i') as insert_time, 
+		date_format(t.update_time,'%Y-%m-%d %H:%i') as update_time
+		from tb_self_driving_trowelling t 
+		left join tb_self_driving_extend e 
+		on t.id=e.self_driving_id
+		<where>
+			available_flag=1 
+			<if test="title!=null and title!=''">
+				and t.title like '%${title}%'
+			</if>
+		</where>
+	union <!--3.达人圈 -->
+		select id,title,content,
+            (select expert_portrait_url from tb_expert_top where user_id=q.user_id) as picture_list,
+			(select nickname from tc_user where user_id=q.user_id) as nickname,  
+			support_number,favor_number,glance_number,null as address,null as shop_score,
+			null as experience,null as distance,null as phone,null as shop_id,3 as search_type,
+		    (select count(0) from tb_favor where favor_id=q.id and favor_type=3 
+		     and user_id=#{userId,jdbcType=VARCHAR}) as sign_flag,
+		    (select  
+		    	case  
+			    when TIMESTAMPDIFF(minute,insert_time,now()) between 0 and 60
+			    	then CONCAT(TIMESTAMPDIFF(minute,insert_time,now()),'分钟前') 
+			    when TIMESTAMPDIFF(hour,insert_time,now()) between 0 and 8
+			    	then CONCAT(TIMESTAMPDIFF(hour,insert_time,now()),'小时前') 
+			    when TIMESTAMPDIFF(hour,insert_time,now()) &lt; 8
+			    	then date_format(insert_time,'%Y-%m-%d %H:%m')
+		    	end
+		    	from tb_question_and_article a where a.id=q.id)
+		     as publish_time,
+		     date_format(insert_time,'%Y-%m-%d %H:%i') as insert_time,
+		 	 date_format(update_time,'%Y-%m-%d %H:%i') as update_time
+	    from tb_question_and_article q
+	    <where>
+			delete_flag =0
+			<if test="title!=null and title!=''">
+				and q.title like '%${title}%'
+			</if>
+		</where>
+	union <!--4.资讯 -->
+		select id, title, content,picture_list,null as nickname,
+		0 as support_number,0 as favor_number,0 as glance_number,
+		null as publish_time,null as address,null as shop_score,null as experience,
+		null as distance,null as phone,null as shop_id,0 as sign_flag,4 as search_type,
+    	date_format(insert_time,'%Y-%m-%d %H:%i') as insert_time, 
+		date_format(update_time,'%Y-%m-%d %H:%i') as update_time
+		from tb_information i
+		<where>
+			i.delete_flag=0 
+			<if test="title!=null and title!=''">
+				and i.title like '%${title}%'
+			</if>
+		</where>
+	union <!--5.促销 -->
+		select id,title,content,picture_list,null as nickname,
+		0 as support_number,0 as favor_number,0 as glance_number,
+		null as publish_time,null as address,null as shop_score,null as experience,
+		null as distance,null as phone,null as shop_id,0 as sign_flag,5 as search_type,
+		date_format(insert_time,'%Y-%m-%d %H:%i') as insert_time, 
+		date_format(update_time,'%Y-%m-%d %H:%i') as update_time 
+		from tb_promotion p 
+		<where>
+			p.delete_flag=0 
+			<if test="title!=null and title!=''">
+				and p.title like '%${title}%'
+			</if>
+		</where>
+		limit 0,20
+	</select>
+	
+	<!-- 搜索数据-->
+	<select id="getSearchData" resultType="com.gtercn.carhome.web.api.entity.Rescue" parameterType="java.util.Map">
+	select a.id, a.rescue_service, a.repair_service, a.clean_service, a.maintain_service, a.tyre_service, a.shop_pic_url, a.shop_name,
+		a.shop_score, a.shop_description, a.longitude, a.latitude, a.province, a.city, a.district, a.detail_address, a.tel_number_list,
+		a.display_pic_url_list, a.is_top, a.display_priority,
+		(select count(0) from tb_favor where user_id=#{userId,jdbcType=VARCHAR}
+			and favor_id= a.id and favor_type=6 and delete_flag != 1) as is_favored
+	from tc_shop as a
+	where delete_flag != 1
+	and city_code = #{cityCode}
+	and shop_name like '%${shopName}%'
+	</select>
+</mapper>

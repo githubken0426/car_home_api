@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/repos/!svn/ver/18145/RDC2016/Carhome/src/development/api/car_home/src/resources
+END
+sendMessageConfig.properties
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/repos/!svn/ver/19598/RDC2016/Carhome/src/development/api/car_home/src/resources/sendMessageConfig.properties
+END
+wxPay.properties
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/repos/!svn/ver/18145/RDC2016/Carhome/src/development/api/car_home/src/resources/wxPay.properties
+END
+carhomeApi.properties
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/repos/!svn/ver/19237/RDC2016/Carhome/src/development/api/car_home/src/resources/carhomeApi.properties
+END
