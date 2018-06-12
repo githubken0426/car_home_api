@@ -26,6 +26,7 @@
 		when 6 then (select shop_name from tc_shop where id =
 			(select shop_id from tb_rescue where id=favor_id ))
 		when 7 then (select shop_name from tc_shop where id=favor_id )
+		when 8 then (select goods_title from inn_goods where id=favor_id )
 		end as title
 	from tb_favor 
 	where user_id = #{userId,jdbcType=VARCHAR}

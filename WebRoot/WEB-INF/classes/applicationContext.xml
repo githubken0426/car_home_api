@@ -119,7 +119,7 @@
 	    </bean>  
     	
     	
-    	<!-- 拦截器
+    	<!-- 拦截器 
     	<mvc:interceptors>
     		<mvc:interceptor>
     			<mvc:mapping path="/**" />
@@ -129,8 +129,8 @@
     			<mvc:exclude-mapping path="/app/v1/selfdriving/open/**" />
     			<bean class="com.gtercn.carhome.web.api.signature.ApiSignInterceptor" />
     		</mvc:interceptor>
-    	</mvc:interceptors> 
-    	 -->
+    	</mvc:interceptors> -->
+    	
 	    <!-- 全局异常配置 -->  
     	<bean id="exceptionResolver" class="com.gtercn.carhome.web.api.exception.MyExceptionHandler" />
     	
